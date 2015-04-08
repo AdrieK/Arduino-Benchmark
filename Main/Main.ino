@@ -1,21 +1,12 @@
 #define ITER 200000L
 #define SCORE_DIVIDER 99999999L
-#define UNO_SCORE 563L// I might eventually use this to guess which arduino you are benchmarking
+#define UNO_SCORE 563L
 #define MICRO_SCORE 559L
 #define DUE_SCORE 3301L
 #define MALLOC_SIZE 256
-void printFloat(float value, unsigned long precision){
-	Serial.print(int(value));
-	Serial.print(".");
-	unsigned long frac;
-	if (value >= 0)
-		frac = (value - long(value)) * precision;
-	else
-		frac = (long(value) - value) * precision;
-	Serial.println(frac, DEC);
-}
 void setup() {
 	Serial.begin(57600);
+        long StartTime=millis();
 	long Millis=millis();
 	long increment = 0;
 	float f = 0.0f;
@@ -72,7 +63,24 @@ void setup() {
 	Serial.print("malloc size is: ");
 	Serial.println(MALLOC_SIZE);
 	Millis4 = millis();
-	long score = Millis + Millis2 + Millis3+Millis4;
+	long Millis5 = millis();
+	long INTEGER_BENCHMARK=random(0L, 2323213);
+	Serial.println("Integer benchmark starting... ");
+	for (long i = 0; i < ITER; i++){
+		INTEGER_BENCHMARK *= 10000;
+		INTEGER_BENCHMARK /= 5;
+		INTEGER_BENCHMARK += 7;
+		for (long j = 0; j < 5; j++){
+			INTEGER_BENCHMARK *= 3;
+			INTEGER_BENCHMARK /= 4;
+		}
+	}
+	Serial.print("Integer time: ");
+	Serial.println(millis() - Millis5);
+	Serial.print("Integer value: ");
+	Serial.println(INTEGER_BENCHMARK);
+	Millis5 = millis();
+	long score = millis()-StartTime;
 	score = SCORE_DIVIDER / score;
 	Serial.println("Your arduino's score is: ");
 	Serial.print(score);
